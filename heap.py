@@ -148,13 +148,13 @@ class Heap:
     def min_heap(self):
         self.heap = self.keys.copy()
 
-        for i in range(len(self.heap)//2 - 1, -1, -1):
+        for i in range(len(self.heap)//2):
             self._heapify_min(self.heap, i)
         return self.heap
     
     def max_heap(self):
         self.heap = self.keys.copy()
-        for i in range(len(self.heap)//2 - 1, -1, -1):
+        for i in range(len(self.heap)//2):
             self.heap = self._heapify_max(self.keys,i)
         return self.heap
 
