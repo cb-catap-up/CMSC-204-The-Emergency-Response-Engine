@@ -4,21 +4,20 @@ from heap import Heap
 
 def is_min_heap_function_correct(keys: list):
     new_heap = Heap(keys)
-    test_keys = keys
-    
-    heapq.heapify(test_keys)
+    new_heap.min_heap()
 
-    print(f"is min heap correct: {new_heap.min_heap() == test_keys}")
-    # new_heap.display_heap()
+    heapq.heapify(keys)
+
+    print(f"is min heap correct: {new_heap.min_heap() == keys}")
+    new_heap.display_heap()
 
 def is_max_heap_function_correct(keys: list):
     new_heap = Heap(keys)
-    test_keys = keys
+    new_heap.max_heap()
 
-    heapq._heapify_max(test_keys)
-    # print(test_keys)
-    new_heap.get_current_nodes_for_each_level()
-    print(f"is max heap correct: {new_heap.max_heap() == test_keys}")
+
+    heapq._heapify_max(keys)
+    print(f"is max heap correct: {new_heap.max_heap() == keys}")
     new_heap.display_heap()
 
 
