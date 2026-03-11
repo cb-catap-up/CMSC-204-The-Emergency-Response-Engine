@@ -14,7 +14,6 @@ class Heap:
             return
         nodes = self.get_current_nodes_for_each_level()
         number_of_node_statements = len(nodes)
-        print(f"number: {number_of_node_statements}")
         node_number_iterator = 1
         next_node_index_to_print = 0
 
@@ -115,46 +114,49 @@ class Heap:
         return 2*index + 2
 
     def _heapify_min(self,keys: list, index):
-        parent = index
-        left_item = self._get_left_children_index(index)
-        right_item = self._get_right_children_index(index)
+        while True:
+            parent = index
+            left_item = self._get_left_children_index(index)
+            right_item = self._get_right_children_index(index)
 
-        while parent != index:
             if left_item < len(keys) and keys[left_item] < keys[parent]:
                 parent = left_item
             if right_item < len(keys) and keys[right_item] < keys[parent]:
                 parent = right_item
-
+            if parent == index:
+                break
             keys[index], keys[parent] = keys[parent], keys[index]
+            index = parent
         return keys
     
     def _heapify_max(self,keys: list, index):
-        parent = index
-        left_item = self._get_left_children_index(index)
-        right_item = self._get_right_children_index(index)
+        while True:
+            parent = index
+            left_item = self._get_left_children_index(index)
+            right_item = self._get_right_children_index(index)
 
-        while parent != index:
             if left_item < len(keys) and keys[left_item] > keys[parent]:
                 parent = left_item
             if right_item < len(keys) and keys[right_item] > keys[parent]:
                 parent = right_item
-            # swap
+            if parent == index:
+                break
             keys[index], keys[parent] = keys[parent], keys[index]
+            index = parent
         return keys
 
     def min_heap(self):
+        self.heap = self.keys.copy()
 
-        for i in range(len(self.keys)//2):
-            self.keys = self._heapify_min(self.keys,i)
-        self.heap = self.keys
-        return self.keys
+        for i in range(len(self.heap)//2 - 1, -1, -1):
+            self._heapify_min(self.heap, i)
+        return self.heap
     
     def max_heap(self):
-
-        for i in range(len(self.keys)//2):
-            self.keys = self._heapify_max(self.keys,i)
-        self.heap = self.keys
-        return self.keys
+        self.heap = self.keys.copy()
+        for i in range(len(self.heap)//2 - 1, -1, -1):
+            self.heap = self._heapify_max(self.keys,i)
+        return self.heap
 
     def peek(self):
         return self.keys[0]
@@ -188,18 +190,18 @@ class Heap:
             print('\n')
     
     def get_current_nodes_for_each_level(self):
-        if not self.keys:
+        if not self.heap:
             raise IndexError("no items from heap")
 
-        height = math.floor(math.log2(len(self.keys)))
+        height = math.floor(math.log2(len(self.heap)))
 
         levels = []
 
         for level in range(height + 1):
             start = 2**level - 1
-            end = min(2**(level + 1) - 2, len(self.keys) - 1)
+            end = min(2**(level + 1) - 2, len(self.heap) - 1)
 
-            current_level = self.keys[start:end+1]
+            current_level = self.heap[start:end+1]
             levels.append(current_level)
 
         return levels
@@ -208,13 +210,14 @@ class Heap:
     def pop(self):
         if not self.keys:
             raise IndexError("pop from empty heap")
-
+        # show initial
+        self.display_heap()
         # Swap root with last element, then remove last element so it can bubble down
         last_index = len(self.keys) - 1
         self.keys[0], self.keys[last_index] = self.keys[last_index], self.keys[0]
         item = self.keys.pop()  # Remove the max (old root)
 
-        print("swap first and last index")
+        print("swap first and last index and remove the last")
         # show heap after each swap
         self.display_heap()
         print('\n')
